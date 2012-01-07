@@ -1,0 +1,27 @@
+Nyancat for your your first few harddisk sectors
+
+Yesterday, I saw the nyancat for the master boot record on twitter: https://minemu.org/nyanmbr/
+I always wanted to do something like that, but with sound, becase the nyancat is only
+a nyancat with this "awesome" music in the background.
+
+I just could not resist and hacked a SB16 driver for playing some nyan tunes this night.
+The downside of this awesomeness is, that it doesn't fit in the 512 Byte boot sector anymore :(
+
+Also the code is not very clean.
+I cutted the nyancat music at 3*64K of size, because it makes copying the data into the DMA region easier.
+The audio sample wastes about 250KBytes of RAM. Remember that you only have 1MB in real mode. Waste ALL the memory!
+
+Usage:
+    qemu -soundhw sb16 -hda sb16.img
+
+I did not yet try this on real hardware, but it works in qemu.
+
+Credits for the graphics part goes to the original creator. I just did the sound part.
+
+
+Another thing:
+I suspect that qemu has a bug in the SB16 interrupt handling:
+I configured the DSP to issue IRQ 10 which qemu happily confirms in its debugging output.
+Then, if the interrupt occurs, it issues IRQ 5 instead of my interrupt 10. Took me 2 hours to figure that out.
+Would be nice if someone can confirm this.
+I could have made an error, too. I didn't do anything with the SB16 until this night.
